@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Python 探索學習平台｜國中資訊科技</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#18263d;--line:#2b3d58;--text:#eaf2ff;--muted:#9eb0ca;--cyan:#55d6ff;--green:#5ee0a0;--orange:#ffbf69;--red:#ff7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#142642 0,#0b1220 60%);color:var(--text);font-family:system-ui,-apple-system,"Microsoft JhengHei",sans-serif}
+header{padding:24px clamp(16px,4vw,48px) 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#42d7ff,#6877ff);display:grid;place-items:center;color:#061222;font-size:24px;font-weight:900;box-shadow:0 0 26px #43caff33}
+h1{font-size:clamp(21px,3vw,30px);margin:0}.sub{color:var(--muted);margin-top:5px;font-size:14px}.pill{border:1px solid #31516f;color:var(--cyan);border-radius:999px;padding:7px 12px;font-size:12px}
+main{padding:22px clamp(12px,3vw,36px) 40px;max-width:1600px;margin:auto}.layout{display:grid;grid-template-columns:250px minmax(320px,1.1fr) minmax(300px,.9fr);gap:16px;align-items:start}
+.panel{background:linear-gradient(180deg,#142138,#101a2b);border:1px solid var(--line);border-radius:17px;overflow:hidden;box-shadow:0 12px 35px #0002}.panel-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px}.panel-head h2{font-size:15px;margin:0}.panel-body{padding:15px}.muted{color:var(--muted)}.small{font-size:12px;line-height:1.65}
+.unit{width:100%;text-align:left;border:1px solid transparent;background:transparent;color:var(--text);padding:11px;border-radius:11px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;margin-bottom:5px}.unit:hover{background:#1b2b44}.unit.active{background:#18344a;border-color:#28617b}.unit .num{color:var(--cyan);font-weight:800;font-size:12px;padding-top:2px;min-width:22px}.unit b{display:block;font-size:13px}.unit small{display:block;color:var(--muted);margin-top:3px;font-size:11px}
+.lesson{padding:16px;border-radius:13px;background:#0e1929;border:1px solid #253851;margin-bottom:14px}.lesson h3{margin:0 0 8px;font-size:18px}.lesson p{color:#c1cfe2;line-height:1.7;font-size:13px;margin:7px 0}.lesson code{color:#86e7ff;background:#1a2a40;padding:2px 5px;border-radius:4px}.example{background:#08111f;border:1px solid #263b56;padding:12px;border-radius:10px;white-space:pre-wrap;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;color:#bdeaff}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:10px 13px;background:#0c1626;border-bottom:1px solid var(--line)}.toolbar span{font-size:12px;color:var(--muted)}
+button,select{font:inherit}.btn{border:1px solid #35506f;background:#1b2b43;color:var(--text);border-radius:9px;padding:8px 12px;cursor:pointer;font-size:12px}.btn:hover{filter:brightness(1.15)}.btn.run{background:linear-gradient(120deg,#1aa5b8,#3779e8);border:0;color:white;font-weight:800}.btn.clear{color:#ffbdc6}
+#editor{width:100%;min-height:340px;resize:vertical;background:#08111f;color:#e0f4ff;border:0;outline:none;padding:18px;font:14px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;white-space:pre;overflow:auto}
+.editor-foot{display:flex;justify-content:space-between;padding:9px 14px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
+.output{min-height:150px;max-height:280px;overflow:auto;white-space:pre-wrap;word-break:break-word;padding:14px;background:#07101c;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;color:#a8f0c8}.var-table{width:100%;border-collapse:collapse;font-size:12px}.var-table th,.var-table td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;overflow-wrap:anywhere}.var-table th{color:var(--muted)}.var-table td:first-child{color:var(--cyan);font-family:monospace}.var-table td:last-child{color:var(--green);font-family:monospace}.var-empty{padding:14px;color:var(--muted);font-size:12px;line-height:1.8}.status{padding:9px 14px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.status.error{color:var(--red)}.status.ok{color:var(--green)}
+#turtleCanvas{width:100%;height:300px;display:block;background:#f6f9ff}.canvas-note{padding:9px 12px;color:var(--muted);font-size:11px;border-top:1px solid var(--line)}
+.right-stack{display:grid;gap:16px}.challenge{padding:14px}.challenge h3{font-size:14px;margin:0 0 8px}.challenge p{font-size:13px;line-height:1.65;color:#c5d3e7}.challenge .hint{background:#0b1728;border-left:3px solid var(--orange);padding:9px 11px;font-size:12px;color:#f3d4a6;line-height:1.6}
+select{background:#14243a;color:var(--text);border:1px solid var(--line);padding:8px 10px;border-radius:9px;max-width:100%}
+footer{text-align:center;color:#7488a6;font-size:11px;margin-top:22px}
+@media(max-width:1100px){.layout{grid-template-columns:220px minmax(300px,1fr)}.right-stack{grid-column:2}.lesson-nav{grid-row:span 2}}
+@media(max-width:720px){header{align-items:flex-start}.layout{grid-template-columns:1fr}.lesson-nav,.right-stack{grid-column:auto}.lesson-nav{order:0}.editor-panel{order:1}.right-stack{order:2}#editor{min-height:280px}}
+
+.free-workspace{margin-top:22px}.free-intro{padding:14px 18px;color:#bcd0e9;font-size:13px;line-height:1.8;border-bottom:1px solid var(--line)}.free-grid{display:grid;grid-template-columns:minmax(350px,1.1fr) minmax(320px,.9fr);gap:16px;padding:16px}.free-editor{width:100%;min-height:420px;resize:vertical;background:#08111f;color:#e0f4ff;border:1px solid #29405c;border-radius:10px;outline:none;padding:18px;font:14px/1.65 ui-monospace,Consolas,monospace;tab-size:4}.free-side{display:grid;gap:14px;align-content:start}.free-side .panel{box-shadow:none}.free-output{min-height:130px;max-height:240px}.free-var-wrap{padding:10px;min-height:85px}.free-actions{display:flex;gap:8px;flex-wrap:wrap}.free-hint{font-size:12px;color:var(--muted);line-height:1.7}.free-status{padding:10px 0;color:var(--muted);font-size:12px}.free-status.ok{color:var(--green)}.free-status.error{color:var(--red)}#freeCanvas{display:block;width:100%;height:230px;background:#f6f9ff}.free-reference{padding:14px 18px;border-top:1px solid var(--line);font-size:12px;line-height:1.9;color:#bed0e6}.free-reference code{color:#86e7ff}.free-reference details{margin-top:6px}.free-reference summary{cursor:pointer;font-weight:700;color:#eaf2ff}@media(max-width:850px){.free-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">Py</div><div><h1>Python 探索學習平台</h1><div class="sub">國中資訊科技・從第一行程式到海龜繪圖</div></div></div><div class="pill">互動式課堂實作　/　Python 3</div></header>
+<main>
+<div class="layout">
+<aside class="panel lesson-nav">
+ <div class="panel-head"><h2>📚 課程地圖</h2><span class="muted small">L01–L09</span></div>
+ <div class="panel-body" id="unitList"></div>
+ <div class="panel-body small muted" style="border-top:1px solid var(--line)">學習流程：閱讀概念 → 載入範例 → 修改程式 → 執行觀察 → 完成挑戰</div>
+</aside>
+<section class="panel editor-panel">
+ <div class="panel-head"><h2>⌨️ 程式編輯器</h2><span class="pill">可自行修改</span></div>
+ <div class="toolbar"><span>main.py · 程式碼練習區</span><div style="display:flex;gap:7px"><button class="btn" id="resetBtn">還原範例</button><button class="btn run" id="runBtn">▶ 執行程式</button></div></div>
+ <textarea id="editor" spellcheck="false" aria-label="Python程式碼編輯器"></textarea>
+ <div class="editor-foot"><span>提示：縮排很重要；文字請使用引號。</span><span id="lineCount">1 行</span></div>
+ <div class="panel-head"><h2>🖥️ 執行結果</h2><button class="btn clear" id="clearBtn">清除結果</button></div>
+ <div class="output" id="output">歡迎來到 Python 探索學習平台！\n選擇左側課程，再按「執行程式」。</div>
+ <div class="status" id="status">等待執行</div>
+ <div class="panel-head"><h2>🔎 變數觀察器</h2><button class="btn" id="clearVarsBtn">清除顯示</button></div>
+ <div id="variablePanel" class="var-empty">執行 Python 後，這裡會顯示變數名稱、資料型態與目前的值。<br>試試看：<code>score = 85</code></div>
+</section>
+<div class="right-stack">
+ <section class="panel"><div class="panel-head"><h2>🧭 本節學習任務</h2></div><div class="challenge" id="lessonInfo"></div></section>
+ <section class="panel"><div class="panel-head"><h2>🐢 海龜繪圖畫布</h2><button class="btn" id="clearCanvas">清空畫布</button></div><canvas id="turtleCanvas" width="700" height="380"></canvas><div class="canvas-note">本平台提供教學用 turtle 繪圖支援：forward、right、left、goto、penup、pendown、pencolor、pensize。</div></section>
+ <section class="panel"><div class="panel-head"><h2>🧩 快速插入範例</h2></div><div class="panel-body"><select id="quickSelect" style="width:100%;margin-bottom:9px"><option value="hello">輸出文字 print()</option><option value="input">輸入與變數 input()</option><option value="vars">變數練習（四種型態）</option><option value="math">算術運算</option><option value="type">資料型態轉換</option><option value="if">條件判斷 if…else</option><option value="for">for 迴圈</option><option value="turtle">海龜繪圖正方形</option></select><button class="btn" id="insertBtn" style="width:100%">載入至編輯器</button><p class="small muted">載入範例會取代目前編輯器內容，請先複製需要保留的程式。</p></div></section>
+</div>
+</div>
+
+<section class="panel free-workspace" id="freeWorkspace">
+ <div class="panel-head"><h2>🚀 Python 自由創作區｜自行撰寫完整程式</h2><span class="pill">獨立編輯・自由實作</span></div>
+ <div class="free-intro">從空白開始撰寫 Python，不會覆蓋上方課程範例。可自由組合 <code>print()</code>、<code>input()</code>、變數、型態轉換、算術與關係運算、<code>if/else</code>、<code>for/range</code>、<code>turtle</code> 等教材功能。程式執行後，右側同步顯示輸出、變數及繪圖結果。</div>
+ <div class="free-grid">
+  <div><div class="toolbar"><span>my_project.py · 學生自主程式</span><div class="free-actions"><button class="btn" id="freeExampleBtn">載入綜合範例</button><button class="btn" id="freeBlankBtn">清空程式</button><button class="btn run" id="freeRunBtn">▶ 執行自由程式</button></div></div>
+   <textarea id="freeEditor" class="free-editor" spellcheck="false" aria-label="自由撰寫 Python 程式碼"># 在這裡自由編寫 Python 程式
+name = "小明"
+score = 85
+print("姓名：", name)
+print("分數：", score)
+if score >= 60:
+    print("及格！")
+else:
+    print("繼續努力！")</textarea>
+   <div class="editor-foot"><span>Tab 可縮排四格 · Ctrl + Enter 可執行</span><span id="freeLineCount">1 行</span></div>
+   <div class="free-actions" style="padding-top:12px"><button class="btn" id="freeSaveBtn">💾 下載 .py</button><button class="btn" id="freeLoadBtn">📂 匯入 .py</button><input type="file" id="freeFileInput" accept=".py,text/plain" hidden><button class="btn" id="freeCopyBtn">複製程式碼</button></div>
+   <div id="freeStatus" class="free-status">自由創作區準備就緒</div>
+  </div>
+  <div class="free-side">
+   <section class="panel"><div class="panel-head"><h2>🖥️ 自由程式執行結果</h2><button class="btn" id="freeClearOutput">清除</button></div><div class="output free-output" id="freeOutput">按「執行自由程式」查看結果。</div></section>
+   <section class="panel"><div class="panel-head"><h2>🔎 自由程式變數觀察器</h2><button class="btn" id="freeClearVars">清除</button></div><div class="free-var-wrap" id="freeVariablePanel"><div class="var-empty">執行後顯示變數名稱、資料型態及值。</div></div></section>
+   <section class="panel"><div class="panel-head"><h2>🐢 自由程式海龜繪圖</h2><button class="btn" id="freeClearCanvas">清空畫布</button></div><canvas id="freeCanvas" width="700" height="380"></canvas><div class="canvas-note">支援教材使用的 Turtle 指令；可與變數、判斷及迴圈一起使用。</div></section>
+  </div>
+ </div>
+ <div class="free-reference"><details><summary>📖 展開：教材 Python 功能速查與範例</summary>
+  <p><b>輸入輸出：</b><code>print("你好")</code>、<code>name = input("姓名：")</code></p>
+  <p><b>變數與型態：</b><code>x = 10</code>、<code>y = 3.14</code>、<code>name = "小明"</code>、<code>ok = True</code>；<code>int()</code>、<code>float()</code>、<code>str()</code>、<code>type()</code></p>
+  <p><b>算術：</b><code>+ - * / % // **</code>；<b>比較：</b><code>== != &gt; &lt; &gt;= &lt;=</code></p>
+  <p><b>條件：</b><code>if score &gt;= 60:</code> 搭配縮排與 <code>else:</code></p>
+  <p><b>迴圈：</b><code>for i in range(4):</code>；<b>繪圖：</b><code>import turtle</code>、<code>t = turtle.Turtle()</code>、<code>t.forward(100)</code>、<code>t.right(90)</code></p>
+ </details></div>
+</section>
+
+<footer>教學用途示範平台｜程式會在瀏覽器端執行；第一次執行需連線載入 Python 執行環境。</footer>
+</main>
+<script>
+const lessons=[
+{title:"認識 Python 與程式工具",tag:"入門",desc:"認識文字式程式語言，理解程式碼是依照指令順序執行。",goal:"能在編輯器輸入程式並觀察執行結果。",task:"將問候語改成自己的班級口號。",code:"# 我的第一支 Python 程式\\nprint('哈囉，Python！')\\nprint('資訊科技，動手實作！')"},
+{title:"基本程式 1：print()",tag:"輸出",desc:"print() 可以把數字、文字或多個項目顯示在執行結果。文字要用單引號或雙引號包起來。",goal:"能正確使用 print() 輸出文字與數字。",task:"讓程式依序顯示姓名、班級，以及 2026。",code:"print('哈囉！')\\nprint(8)\\nprint(8, '資訊科技')"},
+{title:"基本程式 2：input() 與變數",tag:"輸入",desc:"input() 接收使用者輸入，並將內容存入變數。input() 取得的內容預設是字串。",goal:"能使用變數儲存輸入資料，並以 print() 顯示。",task:"請輸入名字，程式再輸出「你好，名字」。",code:"name = input('請問你的名字是？')\\nprint('你好，', name)"},
+{title:"基本程式 3：算術運算",tag:"運算",desc:"Python 支援 +、-、*、/、%、//、**。運算順序與一般數學規則相同，可用括號改變優先順序。",goal:"能使用運算符號計算數值。",task:"輸出 24 ÷ 6 + 2、5 的平方，以及 17 除以 5 的餘數。",code:"print(24 / 6 + 2)\\nprint(5 ** 2)\\nprint(17 % 5)"},
+{title:"基本程式 4：變數與資料型態",tag:"資料",desc:"常見型態包含 int 整數、float 浮點數、str 字串、bool 布林值。變數用等號 = 指定內容。",goal:"能辨認常見資料型態，理解數字與字串不同。",task:"建立整數、浮點數、字串變數，並將它們印出來。",code:"a = 2 + 3\\nb = 4.7 - 2.1\\nc = '2' + '3'\\nprint(a)\\nprint(b)\\nprint(c)"},
+{title:"基本程式 5：資料型態轉換",tag:"轉換",desc:"int() 轉整數、float() 轉浮點數、str() 轉字串。input() 輸入數字後，常需轉型才能運算。",goal:"能把輸入的數字轉成整數並完成計算。",task:"輸入兩個數字，計算平均數。",code:"x = int(input('請輸入數字 x：'))\\ny = int(input('請輸入數字 y：'))\\navg = (x + y) / 2\\nprint('平均是', avg)"},
+{title:"基本程式 6：關係運算符號",tag:"判斷",desc:"== 相等、!= 不相等、> 大於、< 小於、>= 大於或等於、<= 小於或等於。結果是 True 或 False。",goal:"能使用關係運算符號比較兩個值。",task:"比較兩個數字，觀察結果是 True 還是 False。",code:"print(3 + 6 == 2 + 5)\\nprint(7 - 2 != 5 + 4)\\nprint(50 < 100)"},
+{title:"選擇結構：if…else",tag:"選擇",desc:"if 條件成立時執行縮排區塊；else 則處理其他情況。條件式後面要加半形冒號。",goal:"能依條件執行不同程式區塊。",task:"輸入分數，分數大於或等於 60 顯示及格，否則顯示再加油。",code:"score = int(input('請輸入分數：'))\\nif score >= 60:\\n    print('及格！')\\nelse:\\n    print('再加油！')"},
+{title:"for 迴圈與海龜繪圖",tag:"迴圈",desc:"for i in range(次數): 可以重複執行程式。搭配 turtle 的 forward() 與 right()，可以畫出規律圖形。",goal:"能用 for 迴圈減少重複程式碼，並畫出正方形。",task:"把 range(4) 改成 range(6)，觀察圖形如何變化；再思考轉角應該是多少度。",code:"import turtle\\nt = turtle.Turtle()\\nt.pensize(3)\\nt.pencolor('deepskyblue')\\nfor i in range(4):\\n    t.forward(120)\\n    t.right(90)\\n"}
+];
+const quick={
+hello:"print('哈囉，Python！')\\nprint(8, '資訊科技')",
+input:"name = input('請問你的名字是？')\\nprint('你好，', name)",
+vars:"name = '小明'\\nage = 15\\nheight = 168.5\\nis_student = True\\nprint(name, age, height, is_student)",
+math:"print(24 / 6 + 2)\\nprint(5 ** 2)\\nprint(17 % 5)",
+type:"x = int('8')\\ny = float('3.5')\\nz = str(2026)\\nprint(x, y, z)",
+if:"score = int(input('請輸入分數：'))\\nif score >= 60:\\n    print('及格！')\\nelse:\\n    print('再加油！')",
+for:"for i in range(5):\\n    print('第', i + 1, '次練習')",
+turtle:lessons[8].code
+};
+let current=0, pyodide=null, busy=false;
+const $=id=>document.getElementById(id);
+function renderUnits(){ $('unitList').innerHTML=lessons.map((l,i)=>`<button class="unit ${i===current?'active':''}" data-i="${i}"><span class="num">${String(i+1).padStart(2,'0')}</span><span><b>${l.title}</b><small>${l.tag} · 點選開始</small></span></button>`).join('');document.querySelectorAll('.unit').forEach(b=>b.onclick=()=>loadLesson(+b.dataset.i));}
+function updateLineCount(){const n=$('editor').value.split('\\n').length;$('lineCount').textContent=n+' 行';}
+function loadLesson(i){current=i;renderUnits();const l=lessons[i];$('editor').value=l.code.replace(/\\n/g,'\n');$('lessonInfo').innerHTML=`<h3>${l.title}</h3><p>${l.desc}</p><p><b>🎯 學習目標：</b>${l.goal}</p><div class="hint"><b>挑戰任務</b><br>${l.task}</div>`;updateLineCount();$('status').textContent='已載入課程範例';$('status').className='status';}
+$('editor').addEventListener('input',updateLineCount);
+$('editor').addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();const a=e.target,s=a.selectionStart,en=a.selectionEnd;a.value=a.value.substring(0,s)+'    '+a.value.substring(en);a.selectionStart=a.selectionEnd=s+4;updateLineCount();}});
+function clearCanvas(){clearAnyCanvas('turtleCanvas');}
+function clearAnyCanvas(id){const c=$(id),ctx=c.getContext('2d');ctx.fillStyle='#f6f9ff';ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle='#e4ebf5';ctx.lineWidth=1;for(let x=0;x<c.width;x+=25){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,c.height);ctx.stroke()}for(let y=0;y<c.height;y+=25){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.width,y);ctx.stroke()}ctx.strokeStyle='#c4d2e4';ctx.beginPath();ctx.moveTo(c.width/2,0);ctx.lineTo(c.width/2,c.height);ctx.moveTo(0,c.height/2);ctx.lineTo(c.width,c.height/2);ctx.stroke();}
+clearCanvas();
+async function initPython(){if(pyodide)return pyodide;$('status').textContent='正在載入 Python 執行環境，第一次可能需要一些時間…';pyodide=await loadPyodide();pyodide.setStdout({batched:s=>appendOutput(s)});pyodide.setStderr({batched:s=>appendOutput(s)});await pyodide.runPythonAsync(`
+import sys, types, builtins, js
+from js import prompt
+def classroom_input(msg=''):
+    value = prompt(str(msg))
+    if value is None:
+        raise EOFError("使用者取消輸入")
+    return value
+builtins.input = classroom_input
+class ClassroomTurtle:
+    def __init__(self):
+        self.x=350; self.y=190; self.angle=0; self.down=True; self.color='black'; self.width=2
+        self.draw()
+    def draw(self):
+        js.turtleMove(self.x,self.y,self.angle,self.color,self.width,self.down)
+    def forward(self,d):
+        import math
+        nx=self.x+float(d)*math.cos(math.radians(self.angle)); ny=self.y-float(d)*math.sin(math.radians(self.angle))
+        js.turtleLine(self.x,self.y,nx,ny,self.color,self.width,self.down)
+        self.x,self.y=nx,ny; self.draw()
+    def right(self,a): self.angle-=float(a); self.draw()
+    def left(self,a): self.angle+=float(a); self.draw()
+    def goto(self,x,y):
+        nx=350+float(x); ny=190-float(y)
+        js.turtleLine(self.x,self.y,nx,ny,self.color,self.width,self.down); self.x,self.y=nx,ny; self.draw()
+    def penup(self): self.down=False
+    def pendown(self): self.down=True
+    def pencolor(self,c): self.color=str(c)
+    def pensize(self,w): self.width=float(w)
+    def speed(self,*a): pass
+    def shape(self,*a): pass
+    def setheading(self,a): self.angle=float(a)
+    def home(self): self.x,self.y,self.angle=350,190,0; self.draw()
+    def clear(self): js.turtleClear(); self.x,self.y,self.angle=350,190,0
+    def hideturtle(self): pass
+    def showturtle(self): pass
+    def begin_fill(self): pass
+    def end_fill(self): pass
+mod=types.ModuleType('turtle')
+mod.Turtle=ClassroomTurtle
+mod.Screen=lambda: types.SimpleNamespace(exitonclick=lambda:None, title=lambda *a:None, bgcolor=lambda *a:None)
+sys.modules['turtle']=mod
+`);
+return pyodide;}
+let outputParts=[];let activeOutputId='output';let activeCanvasId='turtleCanvas';
+function appendOutput(s){outputParts.push(s);const el=$(activeOutputId);el.textContent=outputParts.join('');el.scrollTop=el.scrollHeight;}
+function setupTurtleBridge(){const c=$(activeCanvasId),ctx=c.getContext('2d');window.turtleLine=(x1,y1,x2,y2,color,width,down)=>{if(!down)return;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap='round';ctx.stroke();};window.turtleMove=(x,y,a,color,width,down)=>{};window.turtleClear=()=>clearAnyCanvas(activeCanvasId);}
+function clearVariables(){
+  $('variablePanel').className='var-empty';
+  $('variablePanel').textContent='變數顯示已清除；重新執行程式即可更新。';
+}
+function showVariables(p){
+  const jsonText=p.runPython(`import json, types
+def _student_repr(value):
+    try:
+        shown=repr(value)
+    except Exception:
+        shown='<無法顯示>'
+    return shown[:160] + ('…' if len(shown)>160 else '')
+_variable_rows=[]
+for _key,_val in sorted(globals().copy().items()):
+    if _key.startswith('_') or _key in ('sys','types','builtins','js','prompt','classroom_input','ClassroomTurtle','mod','turtle','json'):
+        continue
+    if isinstance(_val, types.ModuleType) or callable(_val):
+        continue
+    _variable_rows.append([_key, type(_val).__name__, _student_repr(_val)])
+json.dumps(_variable_rows, ensure_ascii=False)`);
+  const rows=JSON.parse(jsonText);
+  const panel=$('variablePanel');
+  if(!rows.length){
+    panel.className='var-empty';
+    panel.textContent='目前沒有學生建立的變數。試試：score = 85';
+    return;
+  }
+  panel.className='';
+  const table=document.createElement('table');
+  table.className='var-table';
+  const thead=document.createElement('thead');
+  const header=document.createElement('tr');
+  for(const h of ['變數名稱','資料型態','目前的值']){
+    const th=document.createElement('th');th.textContent=h;header.appendChild(th);
+  }
+  thead.appendChild(header);table.appendChild(thead);
+  const tbody=document.createElement('tbody');
+  for(const row of rows){
+    const tr=document.createElement('tr');
+    for(const value of row){const td=document.createElement('td');td.textContent=value;tr.appendChild(td);}
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);panel.replaceChildren(table);
+}
+async function runCode(){if(busy)return;busy=true;$('runBtn').disabled=true;$('runBtn').textContent='執行中…';outputParts=[];$('output').textContent='';$('status').className='status';try{activeOutputId='output';activeCanvasId='turtleCanvas';setupTurtleBridge();const p=await initPython();clearCanvas();await p.runPythonAsync($('editor').value);showVariables(p);$('status').textContent='✓ 程式執行完成';$('status').className='status ok';if(!$('output').textContent)$('output').textContent='（程式已執行，沒有輸出文字。若是海龜繪圖，請查看右側畫布。）';}catch(e){$('status').textContent='程式發生錯誤：請檢查語法、縮排或輸入內容。';$('status').className='status error';appendOutput(String(e));}finally{busy=false;$('runBtn').disabled=false;$('runBtn').textContent='▶ 執行程式';}}
+$('runBtn').onclick=runCode;$('clearVarsBtn').onclick=clearVariables;$('resetBtn').onclick=()=>loadLesson(current);$('clearBtn').onclick=()=>{outputParts=[];$('output').textContent='';$('status').textContent='結果已清除';$('status').className='status';};$('clearCanvas').onclick=clearCanvas;
+$('insertBtn').onclick=()=>{$('editor').value=quick[$('quickSelect').value];updateLineCount();$('status').textContent='已載入快速範例';};
+renderUnits();loadLesson(1);
+
+const freeExample=`# 綜合練習：變數、輸入、運算、條件、迴圈、海龜繪圖
+name = input("請輸入姓名：")
+score = int(input("請輸入分數："))
+bonus = 5
+final_score = score + bonus
+print("學生：", name)
+print("加分後：", final_score)
+if final_score >= 60:
+    print("通過！")
+else:
+    print("繼續努力！")
+for i in range(3):
+    print("練習次數：", i + 1)
+import turtle
+t = turtle.Turtle()
+t.pencolor("royalblue")
+for i in range(4):
+    t.forward(100)
+    t.right(90)`;
+function freeLines(){$('freeLineCount').textContent=$('freeEditor').value.split('\n').length+' 行';}
+$('freeEditor').addEventListener('input',freeLines);
+$('freeEditor').addEventListener('keydown',e=>{
+ if(e.key==='Tab'){e.preventDefault();const a=e.target,p=a.selectionStart,q=a.selectionEnd;a.value=a.value.slice(0,p)+'    '+a.value.slice(q);a.selectionStart=a.selectionEnd=p+4;freeLines();}
+ if(e.key==='Enter'&&e.ctrlKey){e.preventDefault();runFreeCode();}
+});
+$('freeExampleBtn').onclick=()=>{$('freeEditor').value=freeExample;freeLines();};
+$('freeBlankBtn').onclick=()=>{$('freeEditor').value='';freeLines();$('freeEditor').focus();};
+$('freeClearOutput').onclick=()=>{$('freeOutput').textContent='';};
+$('freeClearVars').onclick=()=>{$('freeVariablePanel').innerHTML='<div class="var-empty">已清除變數顯示。</div>';};
+$('freeClearCanvas').onclick=()=>clearAnyCanvas('freeCanvas');
+$('freeCopyBtn').onclick=async()=>{try{await navigator.clipboard.writeText($('freeEditor').value);$('freeStatus').textContent='已複製程式碼';}catch(e){$('freeEditor').select();document.execCommand('copy');$('freeStatus').textContent='已嘗試複製程式碼';}};
+$('freeSaveBtn').onclick=()=>{const blob=new Blob([$('freeEditor').value],{type:'text/x-python;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='my_project.py';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('freeLoadBtn').onclick=()=>$('freeFileInput').click();
+$('freeFileInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('freeEditor').value=await f.text();freeLines();e.target.value='';$('freeStatus').textContent='已匯入 '+f.name;};
+function renderFreeVariables(rows){
+ const panel=$('freeVariablePanel');
+ if(!rows.length){panel.innerHTML='<div class="var-empty">沒有建立可顯示的變數。</div>';return;}
+ const table=document.createElement('table');table.className='var-table';
+ const head=document.createElement('tr');for(const h of ['變數名稱','資料型態','目前的值']){const th=document.createElement('th');th.textContent=h;head.appendChild(th);}table.appendChild(head);
+ for(const r of rows){const tr=document.createElement('tr');for(const v of r){const td=document.createElement('td');td.textContent=v;tr.appendChild(td);}table.appendChild(tr);}
+ panel.replaceChildren(table);
+}
+async function runFreeCode(){
+ if(busy)return;busy=true;const button=$('freeRunBtn');button.disabled=true;button.textContent='執行中…';
+ activeOutputId='freeOutput';activeCanvasId='freeCanvas';outputParts=[];$('freeOutput').textContent='';$('freeStatus').textContent='執行中…';$('freeStatus').className='free-status';
+ try{
+   setupTurtleBridge();clearAnyCanvas('freeCanvas');const p=await initPython();
+   // initPython may await; re-select free workspace output after load.
+   activeOutputId='freeOutput';activeCanvasId='freeCanvas';setupTurtleBridge();
+   const source=$('freeEditor').value;
+   const runner=`_free_scope={'__name__':'__main__'}\nexec(compile(${JSON.stringify(source)}, '<自由創作區>', 'exec'), _free_scope)`;
+   try{await p.runPythonAsync(runner);$('freeStatus').textContent='✓ 自由程式執行完成';$('freeStatus').className='free-status ok';}
+   catch(e){$('freeStatus').textContent='程式執行時發生錯誤，請檢查下方訊息';$('freeStatus').className='free-status error';appendOutput(String(e));}
+   const rowsJson=p.runPython(`import json,types
+_free_visible=[]
+for _k,_v in sorted(_free_scope.items()):
+    if _k.startswith('_') or isinstance(_v,types.ModuleType) or callable(_v):
+        continue
+    try:
+        _repr=repr(_v)
+    except Exception:
+        _repr='<無法顯示>'
+    _free_visible.append([_k,type(_v).__name__,_repr[:160]])
+json.dumps(_free_visible,ensure_ascii=False)`);
+   renderFreeVariables(JSON.parse(rowsJson));
+   if(!$('freeOutput').textContent)$('freeOutput').textContent='（程式執行完成，沒有文字輸出；如有 turtle 指令請查看畫布。）';
+ }catch(e){$('freeStatus').textContent='執行環境或程式發生錯誤';$('freeStatus').className='free-status error';appendOutput(String(e));}
+ finally{busy=false;button.disabled=false;button.textContent='▶ 執行自由程式';}
+}
+$('freeRunBtn').onclick=runFreeCode;
+clearAnyCanvas('freeCanvas');freeLines();
+
+</script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js">
+const freeExample=`# 綜合練習：變數、輸入、運算、條件、迴圈、海龜繪圖
+name = input("請輸入姓名：")
+score = int(input("請輸入分數："))
+bonus = 5
+final_score = score + bonus
+print("學生：", name)
+print("加分後：", final_score)
+if final_score >= 60:
+    print("通過！")
+else:
+    print("繼續努力！")
+for i in range(3):
+    print("練習次數：", i + 1)
+import turtle
+t = turtle.Turtle()
+t.pencolor("royalblue")
+for i in range(4):
+    t.forward(100)
+    t.right(90)`;
+function freeLines(){$('freeLineCount').textContent=$('freeEditor').value.split('\n').length+' 行';}
+$('freeEditor').addEventListener('input',freeLines);
+$('freeEditor').addEventListener('keydown',e=>{
+ if(e.key==='Tab'){e.preventDefault();const a=e.target,p=a.selectionStart,q=a.selectionEnd;a.value=a.value.slice(0,p)+'    '+a.value.slice(q);a.selectionStart=a.selectionEnd=p+4;freeLines();}
+ if(e.key==='Enter'&&e.ctrlKey){e.preventDefault();runFreeCode();}
+});
+$('freeExampleBtn').onclick=()=>{$('freeEditor').value=freeExample;freeLines();};
+$('freeBlankBtn').onclick=()=>{$('freeEditor').value='';freeLines();$('freeEditor').focus();};
+$('freeClearOutput').onclick=()=>{$('freeOutput').textContent='';};
+$('freeClearVars').onclick=()=>{$('freeVariablePanel').innerHTML='<div class="var-empty">已清除變數顯示。</div>';};
+$('freeClearCanvas').onclick=()=>clearAnyCanvas('freeCanvas');
+$('freeCopyBtn').onclick=async()=>{try{await navigator.clipboard.writeText($('freeEditor').value);$('freeStatus').textContent='已複製程式碼';}catch(e){$('freeEditor').select();document.execCommand('copy');$('freeStatus').textContent='已嘗試複製程式碼';}};
+$('freeSaveBtn').onclick=()=>{const blob=new Blob([$('freeEditor').value],{type:'text/x-python;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='my_project.py';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('freeLoadBtn').onclick=()=>$('freeFileInput').click();
+$('freeFileInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;$('freeEditor').value=await f.text();freeLines();e.target.value='';$('freeStatus').textContent='已匯入 '+f.name;};
+function renderFreeVariables(rows){
+ const panel=$('freeVariablePanel');
+ if(!rows.length){panel.innerHTML='<div class="var-empty">沒有建立可顯示的變數。</div>';return;}
+ const table=document.createElement('table');table.className='var-table';
+ const head=document.createElement('tr');for(const h of ['變數名稱','資料型態','目前的值']){const th=document.createElement('th');th.textContent=h;head.appendChild(th);}table.appendChild(head);
+ for(const r of rows){const tr=document.createElement('tr');for(const v of r){const td=document.createElement('td');td.textContent=v;tr.appendChild(td);}table.appendChild(tr);}
+ panel.replaceChildren(table);
+}
+async function runFreeCode(){
+ if(busy)return;busy=true;const button=$('freeRunBtn');button.disabled=true;button.textContent='執行中…';
+ activeOutputId='freeOutput';activeCanvasId='freeCanvas';outputParts=[];$('freeOutput').textContent='';$('freeStatus').textContent='執行中…';$('freeStatus').className='free-status';
+ try{
+   setupTurtleBridge();clearAnyCanvas('freeCanvas');const p=await initPython();
+   // initPython may await; re-select free workspace output after load.
+   activeOutputId='freeOutput';activeCanvasId='freeCanvas';setupTurtleBridge();
+   const source=$('freeEditor').value;
+   const runner=`_free_scope={'__name__':'__main__'}\nexec(compile(${JSON.stringify(source)}, '<自由創作區>', 'exec'), _free_scope)`;
+   try{await p.runPythonAsync(runner);$('freeStatus').textContent='✓ 自由程式執行完成';$('freeStatus').className='free-status ok';}
+   catch(e){$('freeStatus').textContent='程式執行時發生錯誤，請檢查下方訊息';$('freeStatus').className='free-status error';appendOutput(String(e));}
+   const rowsJson=p.runPython(`import json,types
+_free_visible=[]
+for _k,_v in sorted(_free_scope.items()):
+    if _k.startswith('_') or isinstance(_v,types.ModuleType) or callable(_v):
+        continue
+    try:
+        _repr=repr(_v)
+    except Exception:
+        _repr='<無法顯示>'
+    _free_visible.append([_k,type(_v).__name__,_repr[:160]])
+json.dumps(_free_visible,ensure_ascii=False)`);
+   renderFreeVariables(JSON.parse(rowsJson));
+   if(!$('freeOutput').textContent)$('freeOutput').textContent='（程式執行完成，沒有文字輸出；如有 turtle 指令請查看畫布。）';
+ }catch(e){$('freeStatus').textContent='執行環境或程式發生錯誤';$('freeStatus').className='free-status error';appendOutput(String(e));}
+ finally{busy=false;button.disabled=false;button.textContent='▶ 執行自由程式';}
+}
+$('freeRunBtn').onclick=runFreeCode;
+clearAnyCanvas('freeCanvas');freeLines();
+
+</script>
+</body></html>
